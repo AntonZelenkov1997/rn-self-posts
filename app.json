@@ -1,19 +1,18 @@
 {
   "expo": {
-    "name": "rn-sefl-app",
+    "name": "Self Blog",
     "slug": "rn-sefl-app",
     "platforms": [
       "ios",
-      "android",
-      "web"
+      "android"
     ],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/rn-icon.png",
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "image": "./assets/rn-splash.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#242832"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -22,7 +21,14 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.gerda-expirience.self-blog-rn-app",
+      "buildNumber": "1.0.0"
+    },
+    "android": {
+      "package": "com.gerda_expirience.self_blog_rn_app",
+      "versionCode": 1,
+      "permissions": ["CAMERA", "WRITE_EXTERNAL_STORAGE"]
     }
   }
 }

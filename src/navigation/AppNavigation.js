@@ -27,7 +27,7 @@ const navigatorScreenOptions = {
 };
 
 const mainScreenOptions = ({ navigation }) => ({
-	title: 'My home',
+	title: 'Домашняя страница',
 	headerRight: () => (
 		<HeaderButtons HeaderButtonComponent={AppHeaderIcon}>
 			<Item title="Take photo" iconName="ios-camera" onPress={() => navigation.navigate('CreateScreenDrawer')} />
