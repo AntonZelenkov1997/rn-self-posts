@@ -1,13 +1,16 @@
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, Image, Button, ScrollView, Alert } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { YellowBox } from 'react-native';
 import THEME from '../theme';
-import DATA from '../data';
+import { removePost } from '../store/actions/post';
 
 const PostScreen = ({ navigation, route }) => {
 	const { navigate } = navigation;
 	const { postId } = route.params;
 
-	const post = DATA.find((p) => p.id === postId);
+	const dispatch = useDispatch();
+	const post = useSelector((state) => state.post.allPosts).find((p) => p.id === postId);
 
 	const removeHandler = () => {
 		Alert.alert(
@@ -21,16 +24,19 @@ const PostScreen = ({ navigation, route }) => {
 				{
 					text: 'Удалить',
 					style: 'destructive',
-					onPress: () => console.log('OK Pressed')
+					onPress: () => {
+						navigate('MainScreen');
+						dispatch(removePost(postId));
+					}
 				}
 			],
 			{ cancelable: true }
 		);
-	}
-
-	const goToMainScreen = () => {
-		return navigate('MainScreen');
 	};
+
+	if (!post) {
+		return null;
+	}
 
 	return (
 		<ScrollView>
@@ -49,11 +55,14 @@ const styles = StyleSheet.create({
 		height: 200
 	},
 	textWrp: {
-		padding: 10,
+		padding: 10
 	},
 	title: {
 		fontFamily: 'regular'
 	}
 });
+
+
+YellowBox.ignoreWarnings(['Non-serializable values were found in the navigation state']);
 
 export default PostScreen;

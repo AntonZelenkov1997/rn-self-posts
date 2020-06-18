@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, StackRouter } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { Platform } from 'react-native';
@@ -13,6 +13,7 @@ import AppHeaderIcon from '../components/AppHeaderIcon';
 import BookedScreen from '../screens/BookedScreen';
 import AboutScreen from '../screens/AboutScreen';
 import CreateScreen from '../screens/CreateScreen';
+import store from '../store/index';
 
 // Create and configure Navigator for MainStack
 
@@ -26,10 +27,10 @@ const navigatorScreenOptions = {
 };
 
 const mainScreenOptions = ({ navigation }) => ({
-  title: 'My home',
+	title: 'My home',
 	headerRight: () => (
 		<HeaderButtons HeaderButtonComponent={AppHeaderIcon}>
-			<Item title="Take photo" iconName="ios-camera" onPress={() => console.log('press photo')} />
+			<Item title="Take photo" iconName="ios-camera" onPress={() => navigation.navigate('CreateScreenDrawer')} />
 		</HeaderButtons>
 	),
 	headerLeft: () => (
@@ -39,23 +40,27 @@ const mainScreenOptions = ({ navigation }) => ({
 	)
 });
 
-const postScreenOptions = ({ route }) => ({
-	title: `Пост от ${new Date(route.params.date).toDateString()}`,
-	headerRight: () => (
-		<HeaderButtons HeaderButtonComponent={AppHeaderIcon}>
-			<Item title="Take photo" iconName={route.params.booked ? "ios-star" : "ios-star-outline"}  onPress={() => console.log('press photo')} />
-		</HeaderButtons>
-	)
-});
+const postScreenOptions = ({ route }) => {
+	const { booked, toggleBooked, date } = route.params;
+
+	return {
+		title: `Пост от ${new Date(date).toDateString()}`,
+		headerRight: () => (
+			<HeaderButtons HeaderButtonComponent={AppHeaderIcon}>
+				<Item title="Take photo" iconName={booked ? 'ios-star' : 'ios-star-outline'} onPress={toggleBooked} />
+			</HeaderButtons>
+		)
+	};
+};
 
 // create MainStackNavigator and FavoritesStackNavigator
 
 const MainStackComponent = () => (
-  <MainStack.Navigator screenOptions={navigatorScreenOptions} initialRouteName="MainScreen">
-    <MainStack.Screen options={mainScreenOptions} name="MainScreen" component={MainScreen} />
-    <MainStack.Screen options={postScreenOptions} name="PostScreen" component={PostScreen} />
-  </MainStack.Navigator>
-)
+	<MainStack.Navigator screenOptions={navigatorScreenOptions} initialRouteName="MainScreen">
+		<MainStack.Screen options={mainScreenOptions} name="MainScreen" component={MainScreen} />
+		<MainStack.Screen options={postScreenOptions} name="PostScreen" component={PostScreen} />
+	</MainStack.Navigator>
+);
 
 const FavoritesStackComponent = () => (
 	<MainStack.Navigator screenOptions={navigatorScreenOptions} initialRouteName="BookedScreen">
@@ -63,9 +68,6 @@ const FavoritesStackComponent = () => (
 		<MainStack.Screen options={postScreenOptions} name="PostScreen" component={PostScreen} />
 	</MainStack.Navigator>
 );
-
-
-
 
 // create AboutScreenStuck
 
@@ -91,8 +93,6 @@ const AboutStuckComponent = () => (
 	</AboutStuck.Navigator>
 );
 
-
-
 // create CreateScreenStuck
 
 const CreateStuck = createStackNavigator();
@@ -117,23 +117,15 @@ const CreateStuckComponent = () => (
 	</CreateStuck.Navigator>
 );
 
-
-
-
-
 // Create and configure Drawer
 
 const Drawer = createDrawerNavigator();
 
-
-
-
-
 // Create and configure Tabs
 
 const tabNavigatorOptions = {
-  activeTintColor: THEME.MAIN_COLOR,
-}
+	activeTintColor: THEME.MAIN_COLOR
+};
 
 const allPostsTab = {
 	tabBarLabel: 'Всё',
@@ -155,9 +147,11 @@ const TabNavigatorComponent = () => (
 );
 
 const AppNavigation = () => {
-  return (
+	return (
 		<NavigationContainer>
-			<Drawer.Navigator drawerContentOptions={{ activeTintColor: THEME.MAIN_COLOR, labelStyle: { fontFamily: 'semiBold' } }}>
+			<Drawer.Navigator
+				drawerContentOptions={{ activeTintColor: THEME.MAIN_COLOR, labelStyle: { fontFamily: 'semiBold' } }}
+			>
 				<Drawer.Screen
 					options={{ drawerLabel: 'Главная' }}
 					name="MainScreenDrawer"
@@ -175,7 +169,7 @@ const AppNavigation = () => {
 				/>
 			</Drawer.Navigator>
 		</NavigationContainer>
-  );
-}
+	);
+};
 
 export default AppNavigation;
